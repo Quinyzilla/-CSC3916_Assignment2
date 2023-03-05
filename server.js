@@ -93,7 +93,50 @@ router.route('/testcollection')
         res.json(o);
     }
     );
-    
+router.route('/movies')
+    .get((req, res) => {
+        res.json({
+            status: 200,
+            msg: 'GET movies',
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        });})
+    .post((req, res) => {
+        res.json({
+            status: 200,
+            msg: 'movie saved',
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        });})
+    .put(authJwtController.isAuthenticated, (req, res) => {
+        console.log(req.body);
+        res = res.status(200).send({
+            status: true,
+            msg: 'movie updated',
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        });
+        if (req.get('Content-Type')) res = res.type(req.get('Content-Type'));
+        var o = getJSONObjectForMovieRequirement(req);
+        res.json(o);
+    })
+    .delete(authController.isAuthenticated, (req, res) => {
+        console.log(req.body);
+        res = res.status(200);
+        if(req.get('Content-Type')) res = res.type(req.get('Content-Type'));
+        var o = getJSONObjectForMovieRequirement(req);
+        res.json(o);
+    })
+router.all('*', (req, res) => {
+    res.json({
+        error: "Unsupported method"
+    });
+});
+
+
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
 module.exports = app; // for testing only
