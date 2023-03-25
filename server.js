@@ -94,47 +94,69 @@ router.route('/testcollection')
     }
     );
 router.route('/movies')
-    .get((req, res) => {
-        res.json({
-            status: 200,
-            msg: 'GET movies',
-            headers: req.headers,
-            query: req.query,
-            env: process.env.UNIQUE_KEY
-        });})
-    .post((req, res) => {
-        res.json({
-            status: 200,
-            msg: 'movie saved',
-            headers: req.headers,
-            query: req.query,
-            env: process.env.UNIQUE_KEY
-        });})
-    .put(authJwtController.isAuthenticated, (req, res) => {
-        console.log(req.body);
-        res = res.status(200).send({
-            status: true,
-            msg: 'movie updated',
-            headers: req.headers,
-            query: req.query,
-            env: process.env.UNIQUE_KEY
-        });
-        if (req.get('Content-Type')) res = res.type(req.get('Content-Type'));
-        var o = getJSONObjectForMovieRequirement(req);
-        res.json(o);
-    })
-    .delete(authController.isAuthenticated, (req, res) => {
+    .get(function(req, res) {
         console.log(req.body);
         res = res.status(200);
-        if(req.get('Content-Type')) res = res.type(req.get('Content-Type'));
-        var o = getJSONObjectForMovieRequirement(req);
-        res.json(o);
-    })
-router.all('*', (req, res) => {
-    res.json({
-        error: "Unsupported method"
-    });
-});
+        if (req.get("Content-Type")) {
+            console.log("Content-Type: " + req.get("Content-Type"));
+            res = res.type(req.get("Content-Type"));
+        }
+        res.send({
+            status: 200,
+            message: "GET movies",
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        });})
+    .post(function(req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get("Content-Type")) {
+            console.log("Content-Type: " + req.get("Content-Type"));
+            res = res.type(req.get("Content-Type"));
+        }
+        res.send({
+            status: 200,
+            message: "movie saved",
+            headers: req.headers,
+            query: req.query,
+            env: process.env.UNIQUE_KEY
+        });})
+    .put(authJwtController.isAuthenticated, function(req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get("Content-Type")) {
+            console.log("Content-Type: " + req.get("Content-Type"));
+            res = res.type(req.get("Content-Type"));
+    }
+    res.send({
+      status: 200,
+      message: "movie updated",
+      headers: req.headers,
+      query: req.query,
+      env: process.env.UNIQUE_KEY
+    });})
+    .delete(authController.isAuthenticated, function(req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get("Content-Type")) {
+            console.log("Content-Type: " + req.get("Content-Type"));
+            res = res.type(req.get("Content-Type"));
+    }
+    res.send({
+      status: 200,
+      message: "movie deleted",
+      headers: req.headers,
+      query: req.query,
+      env: process.env.UNIQUE_KEY
+    });})
+router.all(function(req, res) {
+    console.log(req.body);
+    res = res.status(403);
+    res.send(
+      "HTTP method not supported: only GET, POST, PUT, and DELETE requests are supported"
+    );
+  });
 
 
 app.use('/', router);
