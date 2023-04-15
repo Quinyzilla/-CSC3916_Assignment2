@@ -41,6 +41,17 @@ function getJSONObjectForMovieRequirement(req) {
     return json;
 }
 
+router.route("/post").post(authController.isAuthenticated, function(req, res) {
+    console.log(req.body);
+    res = res.status(200);
+    if (req.get("Content-Type")) {
+      console.log("Content-Type: " + req.get("Content-Type"));
+      res = res.type(req.get("Content-Type"));
+    }
+    var o = getJSONObject(req);
+    res.json(o);
+  });
+
 router.post('/signup', (req, res) => {
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
