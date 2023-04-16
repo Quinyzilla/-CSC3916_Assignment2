@@ -12,10 +12,10 @@ var authController = require('./auth');
 var authJwtController = require('./auth_jwt');
 db = require('./db')(); //hack
 var jwt = require('jsonwebtoken');
-//var cors = require('cors');
+var cors = require('cors');
 
 var app = express();
-//app.use(cors());
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -40,17 +40,6 @@ function getJSONObjectForMovieRequirement(req) {
 
     return json;
 }
-
-router.route("/post").post(authController.isAuthenticated, function(req, res) {
-    console.log(req.body);
-    res = res.status(200);
-    if (req.get("Content-Type")) {
-      console.log("Content-Type: " + req.get("Content-Type"));
-      res = res.type(req.get("Content-Type"));
-    }
-    var o = getJSONObject(req);
-    res.json(o);
-  });
 
 router.post('/signup', (req, res) => {
     if (!req.body.username || !req.body.password) {
@@ -82,6 +71,28 @@ router.post('/signin', (req, res) => {
         }
     }
 });
+
+router.route('/testcollection')
+    .delete(authController.isAuthenticated, (req, res) => {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get('Content-Type')) {
+            res = res.type(req.get('Content-Type'));
+        }
+        var o = getJSONObjectForMovieRequirement(req);
+        res.json(o);
+    }
+    )
+    .put(authJwtController.isAuthenticated, (req, res) => {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get('Content-Type')) {
+            res = res.type(req.get('Content-Type'));
+        }
+        var o = getJSONObjectForMovieRequirement(req);
+        res.json(o);
+    }
+    );
 
 router.route('/movies')
     .get(function(req, res) {
