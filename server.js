@@ -5,7 +5,7 @@ Description: Web API scaffolding for Movie API
  */
 
 var express = require('express');
-var http = require('http');
+const http = require('http');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var authController = require('./auth');
