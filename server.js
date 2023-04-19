@@ -95,34 +95,12 @@ router.route('/testcollection')
     );
 
 router.route('/movies')
-    .post(function(req, res) {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get("Content-Type")) {
-            console.log("Content-Type: " + req.get("Content-Type"));
-            res = res.type(req.get("Content-Type"));
-        }
-        res.send({
-            status: 200,
-            message: "movie saved",
-            headers: req.headers,
-            query: req.query,
-            env: process.env.UNIQUE_KEY
-        });})
-    .get(function(req, res) {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get("Content-Type")) {
-            console.log("Content-Type: " + req.get("Content-Type"));
-            res = res.type(req.get("Content-Type"));
-        }
-        res.send({
-            status: 200,
-            message: "GET movies",
-            headers: req.headers,
-            query: req.query,
-            env: process.env.UNIQUE_KEY
-        });})
+    .post(function (req, res){
+      res.status(200).send({success: true, msg: 'movie saved'});
+    })
+    .get(function (req, res){
+        res.status(200).send({success: true, msg: 'GET movies'});
+    })
     .put(authJwtController.isAuthenticated, function(req, res) {
         console.log(req.body);
         res = res.status(200);
