@@ -4,6 +4,9 @@ File: Server.js
 Description: Web API scaffolding for Movie API
  */
 
+SECRET_KEY=mysecretdecoderring
+UNIQUE_KEY=1234
+
 var express = require('express');
 var http = require('http');
 var bodyParser = require('body-parser');
