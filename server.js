@@ -75,32 +75,41 @@ router.post('/signin', (req, res) => {
 });
 
 router.route('/movies')
-    .delete(authController.isAuthenticated, function(req, res) {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-            res.status(200).send({success: true, msg: 'movie deleted'});
-        }
-        var o = getJSONObjectForMovieRequirement(req);
-        res.json(o);
-    })
-    .put(authJwtController.isAuthenticated, function(req, res) {
-        console.log(req.body);
-        res = res.status(200);
-        if (req.get('Content-Type')) {
-            res = res.type(req.get('Content-Type'));
-            res.status(200).send({success: true, msg: 'movie updated'});
-        }
-        var o = getJSONObjectForMovieRequirement(req);
-        res.json(o);
+    .post(function (req, res){
+      res.status(200).send({success: true, msg: 'movie saved'});
     })
     .get(function (req, res){
         res.status(200).send({success: true, msg: 'GET movies'});
     })
-    .post(function (req, res){
-        res.status(200).send({success: true, msg: 'movie saved'});
-    });
+    .put(authJwtController.isAuthenticated, function(req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get("Content-Type")) {
+            console.log("Content-Type: " + req.get("Content-Type"));
+            res = res.type(req.get("Content-Type"));
+    }
+    res.send({
+      status: 200,
+      message: "movie updated",
+      headers: req.headers,
+      query: req.query,
+      env: process.env.UNIQUE_KEY
+    });})
+    .delete(authController.isAuthenticated, function(req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get("Content-Type")) {
+            console.log("Content-Type: " + req.get("Content-Type"));
+            res = res.type(req.get("Content-Type"));
+    }
+    res.send({
+      status: 200,
+      message: "movie deleted",
+      headers: req.headers,
+      query: req.query,
+      env: process.env.UNIQUE_KEY
+    });})
+
 
 router.all(function(req, res) {
     console.log(req.body);
