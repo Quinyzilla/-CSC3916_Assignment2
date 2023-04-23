@@ -42,6 +42,7 @@ function getJSONObjectForMovieRequirement(req) {
 }
 
 router.post('/signup', (req, res) => {
+    
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
     } else {
@@ -57,6 +58,7 @@ router.post('/signup', (req, res) => {
 
 router.post('/signin', (req, res) => {
     var user = db.findOne(req.body.username);
+    
 
     if (!user) {
         res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
