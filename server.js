@@ -41,21 +41,37 @@ function getJSONObjectForMovieRequirement(req) {
 
     return json;
 }
-console.log("message 2")
-router.post('/signup', (req, res) => {
-    console.log("message 3")
-    if (!req.body.username || !req.body.password) {
-        res.json({success: false, msg: 'Please include both username and password to signup.'})
-    } else {
-        var newUser = {
-            username: req.body.username,
-            password: req.body.password
-        };
-
-        db.save(newUser); //no duplicate checking
-        res.json({success: true, msg: 'Successfully created new user.'})
+router.route("/post").post(authController.isAuthenticated, function(req, res) {
+    console.log(req.body);
+    res = res.status(200);
+    if (req.get("Content-Type")) {
+      console.log("Content-Type: " + req.get("Content-Type"));
+      res = res.type(req.get("Content-Type"));
     }
-});
+    var o = getJSONObject(req);
+    res.json(o);
+  });
+  
+router
+  .route("/signup")
+  .post(function(req, res) {
+    if (!req.body.username || !req.body.password) {
+      res.json({ success: false, msg: "Please pass username and password." });
+    } else {
+      var newUser = {
+        username: req.body.username,
+        password: req.body.password
+      };
+      // save the user
+      db.save(newUser); //no duplicate checking
+      res.json({ success: true, msg: "Successful created new user." });
+    }
+  })
+  .all(function(req, res) {
+    console.log(req.body);
+    res = res.status(403);
+    res.send("HTTP method not supported: only POST request is supported");
+  });
 
 router.post('/signin', (req, res) => {
     var user = db.findOne(req.body.username);
