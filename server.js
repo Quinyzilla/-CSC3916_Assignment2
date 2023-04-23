@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 var router = express.Router();
+console.log("message 1")
 
 function getJSONObjectForMovieRequirement(req) {
     var json = {
@@ -40,9 +41,9 @@ function getJSONObjectForMovieRequirement(req) {
 
     return json;
 }
-
+console.log("message 2")
 router.post('/signup', (req, res) => {
-    
+    console.log("message 3")
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
     } else {
