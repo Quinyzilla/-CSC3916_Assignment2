@@ -3,7 +3,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const opts = {};
-//require('dotenv').config();
+require('dotenv').config();
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
 opts.secretOrKey = process.env.SECRET_KEY;
 
